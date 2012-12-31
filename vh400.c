@@ -42,12 +42,24 @@
  also
  http://vegetronix.com/Products/VH400/VH400-Piecewise-Curve.phtml
 
-
- Program, reads voltage on stdin, prints VWC value on stdout. 
-
  */
 
+#define VERSION "0.5 121231"
+
 #include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <unistd.h>
+
+void usage(void)
+{
+  printf("\nvh400 runs the VWC tranform for the VH400 on a selected column\n");
+  printf(" Version %s\n", VERSION);
+  printf(" Input data on stdin; Result on stdout\n");
+  printf(" Example:\n");
+  printf("vh400 4 < sens.dat \n");
+  exit(-1);
+}
 
 double VWC_VH400_RevA(double v)
 {
@@ -72,18 +84,36 @@ double VWC_VH400_RevA(double v)
    return 26.32*v - 7.89; // Out of range. Follow last line.
 }
 
+int main(int ac, char *av[]) 
+{
+  char buf[BUFSIZ], *res;
+  int i, cpy;
 
-int main()
+  if (ac == 1 || strcmp(av[1], "-h") == 0) 
+    usage();
+
+  cpy = atoi(av[1]);
+
+  while ( fgets ( buf, BUFSIZ, stdin ) != NULL ) {
+    res = strtok( buf, " " );
+    for(i = 0;  res != NULL; i++ ) {
+       if(i == cpy)
+	 printf("%5.1f ", VWC_VH400_RevA(atof(res)));
+       else
+	printf( "%s ", res );
+
+      res = strtok( NULL, " " );
+    }
+  }
+  exit(0);
+}
+
+#ifdef TEST 
+void test(void)
 {
   int i;
-  double vin;
-
-  if( scanf("%lf", &vin) > 0)  
-    printf("%-5.1f\n", VWC_VH400_RevA(vin));
-	   
-#ifdef TEST 
-	   for(i = 0; i < 240; i += 5) 
-	     printf("%5.2f %5.1f\n",((double) i)/100., VWC_VH400_RevA( ((double) i)/100.));
-#endif
-  return 0;
+  for(i = 0; i < 240; i += 5) 
+    printf("%5.2f %5.1f\n",((double) i)/100., VWC_VH400_RevA( ((double) i)/100.));
 }
+#endif
+
