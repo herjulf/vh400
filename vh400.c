@@ -56,8 +56,10 @@ void usage(void)
   printf("\nvh400 runs the VWC tranform for the VH400 on a selected column\n");
   printf(" Version %s\n", VERSION);
   printf(" Input data on stdin; Result on stdout\n");
-  printf(" Example:\n");
+  printf(" Example. Transforms col 4:\n");
   printf("vh400 4 < sens.dat \n");
+  printf(" Example. Shows VWC transform:\n");
+  printf("vh400 -t  \n");
   exit(-1);
 }
 
@@ -84,6 +86,14 @@ double VWC_VH400_RevA(double v)
    return 26.32*v - 7.89; // Out of range. Follow last line.
 }
 
+void test(void)
+{
+  int i;
+
+  for(i = 0; i < 240; i += 5) 
+    printf("%5.2f %5.1f\n",((double) i)/100., VWC_VH400_RevA( ((double) i)/100.));
+}
+
 int main(int ac, char *av[]) 
 {
   char buf[BUFSIZ], *res;
@@ -91,6 +101,11 @@ int main(int ac, char *av[])
 
   if (ac == 1 || strcmp(av[1], "-h") == 0) 
     usage();
+
+  if(strcmp(av[1], "-t") == 0) {
+    test();
+    return 0;
+  }
 
   cpy = atoi(av[1]);
 
@@ -108,12 +123,5 @@ int main(int ac, char *av[])
   exit(0);
 }
 
-#ifdef TEST 
-void test(void)
-{
-  int i;
-  for(i = 0; i < 240; i += 5) 
-    printf("%5.2f %5.1f\n",((double) i)/100., VWC_VH400_RevA( ((double) i)/100.));
-}
-#endif
+
 
