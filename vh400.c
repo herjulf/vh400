@@ -1,5 +1,6 @@
 /*
  * Copyright (c) 2012, Robert Olsson, Herjulf Utveckling, Uppsala, Sweden
+ * with contributions from Henry Eshbaugh <henryeshbaugh@gmail.com>, Boston, MA, US
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
