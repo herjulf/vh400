@@ -1,6 +1,6 @@
-
 /*
  * Copyright (c) 2012, Robert Olsson, Herjulf Utveckling, Uppsala, Sweden
+ * with contributions from Henry Eshbaugh <henryeshbaugh@gmail.com>, Boston, MA, US
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -82,8 +82,11 @@ double VWC_VH400_RevA(double v)
 
    if(v > 1.82 && v <= 2.2) 
       return 26.32*v - 7.89;
+      
+   if (v > 2.2 && v <= 3)
+       return 62.4825*v - 87.4475;
 
-   return 26.32*v - 7.89; // Out of range. Follow last line.
+   return 100.0; // Out of range. Asssume out-of-spec voltages are really just 3.0V with some noise.
 }
 
 void test(void)
